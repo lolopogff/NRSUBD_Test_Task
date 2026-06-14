@@ -111,6 +111,13 @@ const asyncHandler =
     void handler(req, res, next).catch(next);
   };
 
+function getRouteParam(value: string | string[] | undefined): string {
+  if (Array.isArray(value)) {
+    return value[0] ?? "";
+  }
+  return value ?? "";
+}
+
 function subscribeSocketToRequest(socket: WebSocket, requestId: string): void {
   let set = socketsByRequestId.get(requestId);
   if (!set) {
@@ -576,7 +583,7 @@ app.patch(
       return;
     }
 
-    const { requestId } = req.params;
+    const requestId = getRouteParam(req.params.requestId);
     const status = String(req.body?.status ?? "").trim() as RequestStatus;
     const allowedStatuses: RequestStatus[] = ["new", "in_progress", "resolved"];
 
@@ -622,7 +629,7 @@ app.delete(
       return;
     }
 
-    const { requestId } = req.params;
+    const requestId = getRouteParam(req.params.requestId);
     const requestOwner = await findRequestOwner(requestId);
     if (!requestOwner) {
       res.status(404).json({ error: "Request not found" });
@@ -655,7 +662,7 @@ app.get(
       return;
     }
 
-    const { requestId } = req.params;
+    const requestId = getRouteParam(req.params.requestId);
     const requestOwner = await findRequestOwner(requestId);
     if (!requestOwner) {
       res.status(404).json({ error: "Request not found" });
@@ -729,7 +736,7 @@ app.post(
       return;
     }
 
-    const { requestId } = req.params;
+    const requestId = getRouteParam(req.params.requestId);
     const hasAccess = await canAccessRequest(auth, requestId);
     if (!hasAccess) {
       const requestOwner = await findRequestOwner(requestId);
@@ -790,7 +797,8 @@ app.patch(
       return;
     }
 
-    const { requestId, messageId } = req.params;
+    const requestId = getRouteParam(req.params.requestId);
+    const messageId = getRouteParam(req.params.messageId);
     const hasAccess = await canAccessRequest(auth, requestId);
     if (!hasAccess) {
       const requestOwner = await findRequestOwner(requestId);
@@ -877,7 +885,8 @@ app.delete(
       return;
     }
 
-    const { requestId, messageId } = req.params;
+    const requestId = getRouteParam(req.params.requestId);
+    const messageId = getRouteParam(req.params.messageId);
     const hasAccess = await canAccessRequest(auth, requestId);
     if (!hasAccess) {
       const requestOwner = await findRequestOwner(requestId);
