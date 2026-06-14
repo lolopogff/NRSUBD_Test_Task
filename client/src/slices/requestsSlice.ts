@@ -1,3 +1,4 @@
+/** Список правовых запросов (кейсов) и выбранный активный кейс для чата. */
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createRequest, deleteRequest, getRequests, updateRequestStatus } from "../api";
 import { LegalRequest, RequestStatus } from "../types";
@@ -92,6 +93,7 @@ const requestsSlice = createSlice({
       .addCase(fetchRequests.fulfilled, (state, action) => {
         state.loading = false;
         state.items = action.payload;
+        // Автовыбор первого кейса, чтобы чат был доступен сразу после входа.
         if (!state.selectedRequestId && action.payload.length > 0) {
           state.selectedRequestId = action.payload[0].id;
         }

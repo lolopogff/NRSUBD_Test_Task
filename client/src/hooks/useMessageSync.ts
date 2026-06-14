@@ -1,3 +1,10 @@
+/**
+ * Синхронизация сообщений выбранного кейса.
+ *
+ * Два канала (как в советe ТЗ):
+ * 1. WebSocket — мгновенная доставка новых сообщений (message_created)
+ * 2. Polling каждые 15 с — fallback при обрыве WS и для edit/delete
+ */
 import { useEffect } from "react";
 import { Message } from "../types";
 import { useAppDispatch } from "../hooks";
@@ -21,9 +28,10 @@ export function useMessageSync(
 
   useEffect(() => {
     if (!selectedRequestId) return;
+    // Первичная загрузка истории (до 100 последних сообщений).
     void dispatch(fetchMessages(selectedRequestId));
 
-    // Periodic sync fallback, WebSocket handles near-real-time updates.
+    // Периодическая синхронизация — резервный канал относительно WebSocket.
     const interval = setInterval(() => {
       void dispatch(fetchMessages(selectedRequestId));
     }, 15000);

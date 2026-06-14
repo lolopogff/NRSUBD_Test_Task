@@ -1,3 +1,10 @@
+/**
+ * Redux store (Redux Toolkit).
+ *
+ * user     — текущий пользователь и JWT (persist в localStorage)
+ * requests — список кейсов и выбранный кейс
+ * messages — сообщения, сгруппированные по requestId
+ */
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./slices/userSlice";
 import requestsReducer from "./slices/requestsSlice";

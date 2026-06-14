@@ -1,3 +1,7 @@
+/**
+ * Панель чата выбранного кейса: история сообщений, ввод, статус запроса.
+ * Свои сообщения можно редактировать/удалять.
+ */
 import { FormEvent, MouseEvent } from "react";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
@@ -106,6 +110,7 @@ export default function ChatPanel(props: ChatPanelProps) {
               {selectedRequest.description}
             </Typography>
             {user.role === "specialist" ? (
+              // Только специалист меняет статус кейса (new / in_progress / resolved).
               <Stack direction="row" spacing={1} alignItems="center">
                 <Chip label="Статус запроса" size="small" />
                 <Select
@@ -132,6 +137,7 @@ export default function ChatPanel(props: ChatPanelProps) {
 
           <Divider />
 
+          {/* Прокручиваемая история; загружается до 100 последних сообщений. */}
           <Box sx={{ flex: 1, minHeight: 0, py: 2, overflowY: "auto" }}>
             <Stack spacing={1.5}>
               {messages.map((message) => {

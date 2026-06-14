@@ -1,3 +1,7 @@
+/**
+ * Применяет SQL-миграции из server/migrations/ по порядку имени файла.
+ * Уже выполненные миграции учитываются в schema_migrations.
+ */
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { pool } from "./db";
@@ -34,7 +38,6 @@ async function runMigration(): Promise<void> {
         [file],
       );
       await pool.query("COMMIT");
-      // eslint-disable-next-line no-console
       console.log(`Migration ${file} applied`);
     } catch (error) {
       await pool.query("ROLLBACK");
@@ -45,11 +48,9 @@ async function runMigration(): Promise<void> {
 
 runMigration()
   .then(() => {
-    // eslint-disable-next-line no-console
     console.log("Migrations completed");
   })
   .catch((error) => {
-    // eslint-disable-next-line no-console
     console.error("Migration failed:", error);
     process.exitCode = 1;
   })

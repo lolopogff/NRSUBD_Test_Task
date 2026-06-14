@@ -1,3 +1,4 @@
+/** Подписи и цвета статусов правового запроса для UI. */
 import { RequestStatus, UserRole } from "../types";
 
 export function getStatusLabel(status: string): string {

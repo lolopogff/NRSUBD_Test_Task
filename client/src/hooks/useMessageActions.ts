@@ -1,3 +1,4 @@
+/** Локальное состояние редактирования и контекстного меню своих сообщений. */
 import { MouseEvent, useState } from "react";
 import { useAppDispatch } from "../hooks";
 import { editMessage, removeMessage } from "../slices/messagesSlice";

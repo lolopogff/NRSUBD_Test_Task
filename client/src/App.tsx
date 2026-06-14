@@ -1,3 +1,11 @@
+/**
+ * Корневой компонент приложения.
+ *
+ * Поток пользователя:
+ * 1. Вход/регистрация — представление системе (Авторизация)
+ * 2. Выбор или создание правового запроса (кейса)
+ * 3. Просмотр истории сообщений и отправка новых (ChatPanel + useMessageSync)
+ */
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { Box, Container } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "./hooks";
@@ -59,6 +67,7 @@ export default function App() {
     openMessageMenu,
     closeMessageMenu,
     handleSaveMessage,
+    handleDeleteMessage,
     handleEditFromMenu,
     handleDeleteFromMenu,
   } = useMessageActions();
@@ -68,6 +77,7 @@ export default function App() {
     void dispatch(fetchRequests());
   }, [dispatch, user]);
 
+  // WebSocket + polling: синхронизация сообщений активного кейса.
   useMessageSync(selectedRequestId, token);
 
   const handleAuth = async (event: FormEvent) => {
@@ -130,14 +140,16 @@ export default function App() {
   };
 
   const handleDeleteCase = async (requestId: string) => {
-    if (!window.confirm("Удалить кейс и все его сообщения?")) return;
+    if (!window.confirm("Удалить запрос и все его сообщения?")) return;
     await dispatch(removeRequest({ requestId }));
   };
 
+  // У нового пользователя без кейсов — экран создания первого запроса.
   const showEmptyCreateCaseState = Boolean(
     user && user.role === "user" && requests.length === 0,
   );
 
+  // До входа показываем только форму аутентификации.
   if (!user) {
     return (
       <AuthCard

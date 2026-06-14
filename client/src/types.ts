@@ -1,3 +1,7 @@
+/**
+ * Типы frontend — зеркало контракта REST API backend.
+ * User.name — «представление» пользователя системе (требование ТЗ).
+ */
 export type RequestStatus = "new" | "in_progress" | "resolved";
 export type UserRole = "user" | "specialist";
 

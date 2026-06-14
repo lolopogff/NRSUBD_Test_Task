@@ -1,3 +1,7 @@
+/**
+ * Состояние сообщений чата.
+ * Хранение byRequestId позволяет переключаться между кейсами без повторной загрузки.
+ */
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { deleteMessage, getMessages, sendMessage, updateMessage } from "../api";
 import { Message } from "../types";
@@ -82,6 +86,7 @@ export const removeMessage = createAsyncThunk(
   },
 );
 
+/** Без дублей: одно сообщение может прийти и из HTTP, и из WebSocket. */
 function upsertMessage(list: Message[], incoming: Message): Message[] {
   const exists = list.some((item) => item.id === incoming.id);
   if (exists) {
@@ -96,6 +101,7 @@ const messagesSlice = createSlice({
   name: "messages",
   initialState,
   reducers: {
+    /** Добавление сообщения, полученного по WebSocket. */
     receiveLiveMessage: (
       state,
       action: PayloadAction<{ requestId: string; message: Message }>,

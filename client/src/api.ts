@@ -1,3 +1,8 @@
+/**
+ * HTTP-клиент backend API.
+ * Все защищённые запросы передают JWT через Authorization: Bearer.
+ * Базовый URL задаётся REACT_APP_API_URL (по умолчанию localhost:4000).
+ */
 import { AuthResponse, LegalRequest, Message, RequestStatus, UserRole } from "./types";
 
 const API_BASE = process.env.REACT_APP_API_URL ?? "http://localhost:4000";
@@ -90,6 +95,7 @@ export function deleteRequest(payload: {
   });
 }
 
+/** limit=100 — последние N сообщений; параметр before на API для подгрузки старых. */
 export function getMessages(
   requestId: string,
   limit = 100,

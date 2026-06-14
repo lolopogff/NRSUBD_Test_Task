@@ -1,3 +1,7 @@
+/**
+ * Аутентификация: регистрация, вход, JWT.
+ * Сессия сохраняется в localStorage — пользователь остаётся залогинен после перезагрузки.
+ */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { loginUser as loginUserApi, registerUser } from "../api";
 import { User, UserRole } from "../types";
